@@ -8,6 +8,7 @@ use App\Models\lojas_gateways;
 use App\Models\pedidos;
 use App\Models\pedidos_pagamentos;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class Integracao extends Controller
 {
@@ -164,6 +165,21 @@ class Integracao extends Controller
 
 
         $inter =  new Integracao();
-        $inter->integracao($resp);
+       // $inter->integracao($resp);
+        $api = $this->apiRequest($resp);
+    }
+
+    public function apiRequest($dados)
+    {
+
+        $endPoint =  '/exams/processTransaction';
+        $url = 'https://api11.ecompleto.com.br'.$endPoint;
+        $response = Http::withHeaders(
+            [
+                'Authorization' => 'API_KEY'
+            ]
+                )->post($url, $dados);
+var_dump($response);
+        return response($response);
     }
 }
